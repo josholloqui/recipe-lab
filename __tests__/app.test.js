@@ -3,6 +3,7 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const Recipe = require('../lib/models/recipe');
+const { response } = require('../lib/app');
 
 describe('recipe-lab routes', () => {
   beforeEach(() => {
@@ -51,6 +52,23 @@ describe('recipe-lab routes', () => {
       });
   });
 
+  it('finds a recipe by its id', async() => {
+    const recipe = await Recipe.insert({
+      name: 'cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ]
+    });
+
+    const response = await request(app)
+      .get(`/api/v1/recipes/${recipe.id}`);
+
+    expect(response.body).toEqual(recipe);
+  });
+
   it('updates a recipe by id', async() => {
     const recipe = await Recipe.insert({
       name: 'cookies',
@@ -85,5 +103,22 @@ describe('recipe-lab routes', () => {
           ]
         });
       });
+  });
+
+  it('delete a recipe by its id', async() => {
+    const recipe = await Recipe.insert({
+      name: 'cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    const response = await request(app)
+      .delete(`/api/v1/recipes/${recipe.id}`);
+
+    expect(response.body).toEqual(recipe);
   });
 });
