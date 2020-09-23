@@ -3,7 +3,6 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const Recipe = require('../lib/models/recipe');
-const { response } = require('../lib/app');
 
 describe('recipe-lab routes', () => {
   beforeEach(() => {
@@ -122,3 +121,5 @@ describe('recipe-lab routes', () => {
     expect(response.body).toEqual(recipe);
   });
 });
+
+
